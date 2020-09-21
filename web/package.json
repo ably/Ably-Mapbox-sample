@@ -1,0 +1,20 @@
+{
+  "name": "ably_mapbox_sample_web",
+  "version": "1.0.0",
+  "description": "A web app demo using Ably to track a delivery and display it on a map in realtime with Mapbox",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ably": "^1.2.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "engines": {
+    "node": "12.x"
+  }
+}
