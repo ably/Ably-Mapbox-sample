@@ -6,10 +6,13 @@ Example of a basic intergration to render positions from android onto a Map prov
 
 ### To configure `TokenRequests`
 
+This application needs two API keys - one for Ably, and another for MapBox.
+
 Make sure you have a `.env` file that looks something like this:
 
 ```bash
 ABLY_API_KEY=yourably:apikeyhere
+MAPBOX_API_KEY=yourmapboxapikey
 ```
 
 ### To run locally
