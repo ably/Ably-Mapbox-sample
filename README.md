@@ -14,7 +14,12 @@ ABLY_API_KEY=yourably:apikeyhere
 
 ### To run locally
 
-In the project root run:
+In the web directory, first run:
+
+```bash
+npm install
+```
+to install the dependencies, then run:
 
 ```bash
 npm run start
