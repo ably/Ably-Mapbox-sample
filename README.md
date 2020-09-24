@@ -8,7 +8,7 @@ Example of a basic intergration to render positions from android onto a Map prov
 
 This application needs two API keys - one for Ably, and another for MapBox.
 
-Make sure you have a `.env` file that looks something like this:
+Make sure you have a `.env` file in the root of the web directory that looks something like this:
 
 ```bash
 ABLY_API_KEY=yourably:apikeyhere
