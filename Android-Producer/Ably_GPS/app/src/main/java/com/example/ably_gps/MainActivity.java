@@ -183,27 +183,7 @@ public class MainActivity extends AppCompatActivity
         // Permissions ok, we get last location
         location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
-
-        if (location != null) {
-            location_view.setText("Latitude : " + location.getLatitude()
-                    + "\nLongitude : " + location.getLongitude()
-                    + "\nAccuracy : " + location.getAccuracy());
-
-
-            JsonObject payload = new JsonObject();
-            payload.addProperty("Lon", location.getLongitude());
-            payload.addProperty("Lat", location.getLatitude());
-            payload.addProperty("Acc", location.getAccuracy());
-
-            /* publishes a message into Ably with the device's location */
-            try {
-                publishMessage(payload.toString());
-            } catch (AblyException e) {
-                e.printStackTrace();
-            }
-
-
-        }
+        updateLocation(location);
 
         startLocationUpdates();
     }
@@ -236,6 +216,10 @@ public class MainActivity extends AppCompatActivity
     // The exact message format can be strings or JSON or even a binary blob.
     @Override
     public void onLocationChanged(Location location) {
+        updateLocation(location);
+    }
+
+    public void updateLocation(Location location) {
         if (location != null) {
             location_view.setText("Latitude : " + location.getLatitude()
                     + "\nLongitude : " + location.getLongitude()
