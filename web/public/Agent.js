@@ -1,11 +1,12 @@
 export class Agent {
-    constructor(id, latLong, follow, map) {
+    constructor(id, latLong, follow, map, key) {
         this.id = id;
         this.follow = follow || false;
 
         this.position = latLong;
         this.lastDirection = "left";
         this.map = map;
+        this.key = key;
 
         this.el = document.createElement('div');
         this.el.className = 'marker';
@@ -18,7 +19,7 @@ export class Agent {
     async move(destinationLatLong) {
 
         // Plot a route between the place the agent was last located, and the updated destinationLatLong
-        const routeResponse = await TryGetRoute(this.position, destinationLatLong);
+        const routeResponse = await TryGetRoute(this.position, destinationLatLong, this.key);
 
         // If there's no route, we can't really do anything at all.
         if (routeResponse == null) {
@@ -36,20 +37,20 @@ export class Agent {
         }
 
         // Uses the turf.js mapbox plugin to plot the route coordinates as a path
-        var path = turf.linestring([...pathAsLatLongs]);        
-        var pathLength = turf.lineDistance(path, 'miles');
+        let path = turf.linestring([...pathAsLatLongs]);        
+        let pathLength = turf.lineDistance(path, 'miles');
 
         // Configure the number of "steps" we're going to take down that line
         // We're preparing to play an animation where each frame is a step.
 
-        var step = 0;
-        var numSteps = 500; //Change this to set animation resolution
-        var timePerStep = 20; //Change this to alter animation speed
+        let step = 0;
+        const numSteps = 500; //Change this to set animation resolution
+        const timePerStep = 20; //Change this to alter animation speed
         
         // Configure a setInterval callback that will run every 20ms
         // Each invocation is a step.
 
-        var interval = setInterval(() => {
+        let interval = setInterval(() => {
             step += 1;
             
             // We've completed all our steps, so stop running our animation
@@ -112,29 +113,29 @@ export class Agent {
     // https://en.wikipedia.org/wiki/Haversine_formula
     // https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
     calculateDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
-        var R = 6378.137; // Radius of earth in KM
-        var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
-        var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        const R = 6378.137; // Radius of earth in KM
+        let dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+        let dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+        let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
         Math.sin(dLon/2) * Math.sin(dLon/2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        var d = R * c;
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        let d = R * c;
         return d * 1000; // meters
     }
 }
 
-async function TryGetRoute(start, end) {
+async function TryGetRoute(start, end, key) {
     try {
-        return await GetRoute(start, end);
+        return await GetRoute(start, end, key);
     } catch (exception) {
         console.log("There was an error routefinding.", exception);
         return null;
     }
 }
 
-async function GetRoute(start, end) {
-    const directionsApi = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?geometries=geojson&access_token=pk.eyJ1IjoidGhpc2lzam9mcmFuayIsImEiOiJjazl0dTkzZGIwMGY0M2ZwYXlidzBqc2VqIn0._NdPXGNS5xrGsepZgesYWQ`;
+async function GetRoute(start, end, key) {
+    const directionsApi = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?geometries=geojson&access_token=${key}`;
 
     const response = await fetch(directionsApi);
     const responseJson = await response.json();

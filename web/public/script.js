@@ -55,7 +55,7 @@ import { Agent } from "./Agent.js";
         longitude: parsedMessageData.Lon
       };
 
-      agent = new Agent(agentId, agentLocation, followAgent, map);
+      agent = new Agent(agentId, agentLocation, followAgent, map, config.mapBoxApiKey);
 
       // Zoom the map in on the agent after we've created it      
       map.flyTo({center: [agent.position.longitude, agent.position.latitude], zoom: 15, essential: true});
