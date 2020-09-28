@@ -23,11 +23,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 
 import java.util.ArrayList;
 
@@ -56,10 +52,10 @@ public class MainActivity extends AppCompatActivity
     // integer for permissions results request
     private static final int ALL_PERMISSIONS_RESULT = 1011;
 
-// this is the Ably Channel used
+    // this is the Ably Channel used
     private Channel channel;
 
-    private final static String API_KEY = "IH5tpA.Q0CyFg:UlD9FSjHx1esvoBp"; /* Sign up at ably.io to get your API key */
+    private final static String API_KEY = "INSERT_ABLY_API_KEY_HERE"; /* Sign up at ably.io to get your API key */
 
     /* RuntimeException will be thrown if API_KEY will not be set to a proper one */
     static {
@@ -68,10 +64,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-
-
-
+    /*
+      This app firstly attempts to get permission to check the location of the device in onCreate().
+      Once this is done, we initialize Ably in initAbly(), and subscribe to a channel, listening for
+      commands on what rate of position updates are desired by the client.
+      Finally, we start up the location updates in startLocationUpdates(), with onConnected()
+      and onLocationChanged() being used to send the initial and repeated location updates respectively.
+      The actual publish into Ably is done in publishMessage().
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,26 +183,7 @@ public class MainActivity extends AppCompatActivity
         // Permissions ok, we get last location
         location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
-
-        if (location != null) {
-            location_view.setText("Latitude : " + location.getLatitude()
-                    + "\nLongitude : " + location.getLongitude()
-                    + "\nAccuracy : " + location.getAccuracy());
-
-
-            JsonObject payload = new JsonObject();
-            payload.addProperty("Lon", location.getLongitude());
-            payload.addProperty("Lat", location.getLatitude());
-            payload.addProperty("Acc", location.getAccuracy());
-
-            try {
-                publishMessage(payload.toString());
-            } catch (AblyException e) {
-                e.printStackTrace();
-            }
-
-
-        }
+        updateLocation(location);
 
         startLocationUpdates();
     }
@@ -235,6 +216,10 @@ public class MainActivity extends AppCompatActivity
     // The exact message format can be strings or JSON or even a binary blob.
     @Override
     public void onLocationChanged(Location location) {
+        updateLocation(location);
+    }
+
+    public void updateLocation(Location location) {
         if (location != null) {
             location_view.setText("Latitude : " + location.getLatitude()
                     + "\nLongitude : " + location.getLongitude()
@@ -245,6 +230,7 @@ public class MainActivity extends AppCompatActivity
             payload.addProperty("Lat", location.getLatitude());
             payload.addProperty("Acc", location.getAccuracy());
 
+            /* publishes a message into Ably with the device's location */
             try {
                 publishMessage(payload.toString());
             } catch (AblyException e) {
@@ -262,7 +248,7 @@ public class MainActivity extends AppCompatActivity
                         permissionsRejected.add(perm);
                     }
                 }
-
+                // If any permissions are rejected, try to request them again
                 if (permissionsRejected.size() > 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
@@ -296,8 +282,9 @@ public class MainActivity extends AppCompatActivity
         clientOptions.key = API_KEY;
         clientOptions.echoMessages = false;
         AblyRealtime realtime = new AblyRealtime(clientOptions);
-        /* Get sport channel you can subscribe to */
+        /* Get locations channel you can subscribe to */
         channel = realtime.channels.get("agent002.delivery223.locations");
+        /* The rate at which this app sends location updates can be changed via messages sent on the above channel */
         channel.subscribe(new Channel.MessageListener() {
             @Override
             public void onMessage(Message messages) {
@@ -305,15 +292,12 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getBaseContext(), "Message received: " + (String)messages.data, Toast.LENGTH_SHORT).show();
 
                 try {
-                 //   JsonObject  payload = new JsonParser().parse((String) messages.data).getAsJsonObject();
-
                     if(((JsonObject)messages.data).has("speed")){
                         UPDATE_INTERVAL = ((JsonObject)messages.data).get("speed").getAsInt()*1000;
                         FASTEST_INTERVAL = UPDATE_INTERVAL;
                     }
                 }
                 catch(Exception e){
-
                     Log.e("Ably_GPS", "Issue with message data, " + messages.data);
                 }
             }

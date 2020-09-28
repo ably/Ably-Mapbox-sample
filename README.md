@@ -27,3 +27,7 @@ to install the dependencies, then run:
 ```bash
 npm run start
 ```
+
+## Android Location Demo
+
+This application needs an Ably API key. This should be put into the **MainActivity**'s `API_KEY` variable. It has been tested using Android Studio.

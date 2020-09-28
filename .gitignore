@@ -97,3 +97,6 @@ lint/tmp/
 node_modules/
 jspm_packages/
 .package-lock.json
+
+# macOS folder attributes
+**/.DS_Store
