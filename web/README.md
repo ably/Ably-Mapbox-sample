@@ -1,18 +1,18 @@
 # Mapping A Driver in Realtime on the Web
 
-This demo covers how to visualize a driver moving on a map in realtime in a browser. This demo is written in JS and uses the Ably realtime JavaScript SDK, Mapbox-gl and the Mapbox Turf plugin. It is built in Node with Express.
+This demo covers how to visualize a driver moving on a map in real time in a browser. This demo is written in JavaScript and uses the Ably realtime JavaScript SDK, Mapbox-gl and the Mapbox Turf plugin. It is built in Node with Express.
 
 ## server.js
 
 We're running an Express.js server - `server.js`.
 
 ```js
-const express = require("express");
+const express = require('express');
 const Ably = require('ably/promises');
 const client = new Ably.Realtime(process.env.ABLY_API_KEY);
 ```
 
-First, it includes both `express` and the `ably/promises` SDK using require.
+First ,we include both `express` and the `ably/promises` SDK using require.
 Next, we create a new instance of the *Ably.Realtime* `client` passing `process.env.ABLY_API_KEY` to it's constructor.
 
 Make sure you have created a `.env` file in the root of the web directory that looks something like this:
@@ -26,7 +26,7 @@ Next, we create our express instance and map the default route to serve our `vie
 
 ```js
 const app = express();
-app.get("/", async (request, response) => {
+app.get('/', async (request, response) => {
   response.sendFile(__dirname + '/views/index.html');
 });
 ```
@@ -34,7 +34,7 @@ app.get("/", async (request, response) => {
 **We're now going to create an additional route to create Ably Token Request objects.**
 
 ```js
-app.get("/api/createTokenRequest", async (request, response) => {
+app.get('/api/createTokenRequest', async (request, response) => {
   const tokenRequestData = await client.auth.createTokenRequest({ clientId: 'ably-mapbox-sample' });
   response.send(tokenRequestData);
 });
@@ -64,21 +64,20 @@ We'll also link the CSS to style the app and the Mapbox CSS to style the map.
 
 This is where we'll connect to our Ably channel and get data to the Mapbox map.
 
-First we set up a Mapbox map on the page and set its initial style, center lat-long and zoom level.
-
-Then we instance the ably realtime library, create a channel and connect to that channel:
+First we set up a Mapbox map on the page and set its initial style, center lat-long and zoom level. Then we instance the ably realtime library, create a channel and connect to that channel:
 
 ```js
   const ably = new Ably.Realtime.Promise({ authUrl: '/api/createTokenRequest' });
-  const channelId = `agent002.delivery223.locations`;  
+  const channelId = 'agent002.delivery223.locations';  
   const channel = ably.channels.get(channelId);
 
   await channel.attach();
 ```
 
-Here we configure our Ably SDK to 
+Here we configure our Ably SDK to:
+
 * Use the `Promise` client (which supports async/await)
+
 * Pass a configuration object with an `authUrl`.
 
-When the client is created, it'll call our Express.js APIs `createTokenRequest` function, and round-trip to Ably to get a short-lived authentication token for subsequent API calls, renewing its token as required automatically.
-
+When the client is created, it will call our Express.js APIs `createTokenRequest` function, and round-trip to Ably to get a short-lived authentication token for subsequent API calls, renewing its token as required automatically.
