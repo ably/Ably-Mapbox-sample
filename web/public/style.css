@@ -1,0 +1,128 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#map {
+    height: calc(100vh - 86px);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+header,
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header {
+    flex-wrap: wrap;
+}
+
+h1 {
+    margin: 0.6em 0;
+}
+
+h2 {
+    font-size: 1em;
+    color: #ccc;
+}
+
+.historyContainer .item {
+    height: 300px;
+    margin-top: 10px;
+    padding: 20px;
+    border: 1px solid black;
+    overflow: hidden;
+}
+
+
+.switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: max-content;
+    height: 34px;
+    margin-left: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #eee;
+}
+
+.switch-text {
+    display: block;
+    margin: 0 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.switch input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.slider {
+    position: relative;
+    width: 60px;
+    height: 34px;
+    background-color: #F9A01B;
+    -webkit-transition: .4s;
+    transition: .4s;
+    cursor: pointer;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    width: 26px;
+    height: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #50B4F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #50B4F3;
+}
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.marker {
+    width: 40px;
+    height: 40px;
+    background: url(van.png);
+}
+
+[data-direction="down"] {
+    background-position: top center;
+}
+
+[data-direction="up"] {
+    background-position: center -40px;
+}
+
+[data-direction="left"] {
+    background-position: center -80px;
+}
+
+[data-direction="right"] {
+    background-position: bottom center;
+}
