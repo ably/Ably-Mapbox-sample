@@ -23,7 +23,7 @@ export class Agent {
 
         // If there's no route, we can't really do anything at all.
         if (routeResponse == null) {
-            console.log('Couldn't find a path.');
+            console.log("Couldn't find a path.");
             return;
         }
 
