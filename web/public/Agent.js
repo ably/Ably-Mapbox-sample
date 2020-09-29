@@ -4,7 +4,7 @@ export class Agent {
         this.follow = follow || false;
 
         this.position = latLong;
-        this.lastDirection = "left";
+        this.lastDirection = 'left';
         this.map = map;
         this.key = key;
 
@@ -23,7 +23,7 @@ export class Agent {
 
         // If there's no route, we can't really do anything at all.
         if (routeResponse == null) {
-            console.log("Couldn't find a path.");
+            console.log('Couldn't find a path.');
             return;
         }
 
@@ -32,7 +32,7 @@ export class Agent {
 
         // If there's only one point, we can't really follow a route!
         if (pathAsLatLongs.length <= 1) {
-            console.log("Path didn't contain enough points to follow.")
+            console.log("Path didn't contain enough points to follow.");
             return;
         }
 
@@ -100,8 +100,8 @@ export class Agent {
         // Calculate the difference between the last known location and the current one
         // We're going to take the larger of the two, and use that as the direction the agent is travelling in
         
-        const directionLng = targetLngLat.lng <= currentLngLat.lng ? "left" : "right";
-        const directionLat = targetLngLat.lat <= currentLngLat.lat ? "down" : "up";    
+        const directionLng = targetLngLat.lng <= currentLngLat.lng ? 'left' : 'right';
+        const directionLat = targetLngLat.lat <= currentLngLat.lat ? 'down' : 'up';    
         const diffLng = Math.abs(targetLngLat.lng - currentLngLat.lng);
         const diffLat = Math.abs(targetLngLat.lat - currentLngLat.lat);
 
@@ -129,7 +129,7 @@ async function TryGetRoute(start, end, key) {
     try {
         return await GetRoute(start, end, key);
     } catch (exception) {
-        console.log("There was an error routefinding.", exception);
+        console.log('There was an error routefinding.', exception);
         return null;
     }
 }

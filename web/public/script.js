@@ -1,4 +1,4 @@
-import { Agent } from "./Agent.js";
+import { Agent } from './Agent.js';
 
 (async function() {
 
@@ -6,7 +6,7 @@ import { Agent } from "./Agent.js";
   // This means we can keep our mapbox API key in a .env file
   // and not have it checked into our repository.
   // There might be a better way of doing token authentication here.
-  const configRequest = await fetch("/config");
+  const configRequest = await fetch('/config');
   const config = await configRequest.json();
   
   // Here, we're setting up the mapboxgl library with our API key.
@@ -22,7 +22,7 @@ import { Agent } from "./Agent.js";
 
   // Now, let's create our Ably SDK instance, and connect to our agents delivery channel 
   const ably = new Ably.Realtime.Promise({ authUrl: '/api/createTokenRequest' });
-  const channelId = `agent002.delivery223.locations`;  
+  const channelId = 'agent002.delivery223.locations';  
   const channel = ably.channels.get(channelId);
   await channel.attach();
 
@@ -70,8 +70,8 @@ import { Agent } from "./Agent.js";
 
   // Here are some debug controls for the demo.
 
-  const speed = document.getElementById("speed");
-  const animation = document.getElementById("animation");
+  const speed = document.getElementById('speed');
+  const animation = document.getElementById('animation');
   let smooth = animation.checked;
 
   animation.onchange = function(el) {
@@ -80,9 +80,9 @@ import { Agent } from "./Agent.js";
 
   speed.onchange = function(el) {
     if (el.target.checked) {
-      channel.publish("update", "{ \"speed\": 2 }");
+      channel.publish('update', { 'speed': 2 });
     } else {
-      channel.publish("update", "{ \"speed\": 10 }");
+      channel.publish('update', { 'speed': 10 });
     }
   }
   
