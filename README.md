@@ -1,6 +1,6 @@
 # Ably-Mapbox-sample
 
-Example of a basic intergration to render positions from android onto a Map provided by Mapbox via Ably.
+Example of a basic intergration to render positions from android onto a map provided by MapBox via Ably.
 
 ## Web Demo
 
@@ -22,6 +22,7 @@ In the web directory, first run:
 ```bash
 npm install
 ```
+
 to install the dependencies, then run:
 
 ```bash
