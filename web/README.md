@@ -35,7 +35,7 @@ app.get("/", async (request, response) => {
 
 ```js
 app.get("/api/createTokenRequest", async (request, response) => {
-  const tokenRequestData = await client.auth.createTokenRequest({ clientId: 'ably-client-side-api-calls-demo' });
+  const tokenRequestData = await client.auth.createTokenRequest({ clientId: 'ably-mapbox-sample' });
   response.send(tokenRequestData);
 });
 ```

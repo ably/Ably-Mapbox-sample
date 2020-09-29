@@ -1,9 +1,8 @@
 # Sending A Driver's GPS locations in Realtime
 
-This demo covers how to send GPS locations of a driver as they travel. The rate of updates can be changed by requests from the client, and has the potential to fan-out to as many subscribers as needed. This demo is written in Java for Android devices, and uses the [Ably realtime Java SDK](https://github.com/ably/ably-java/), and the [GoogleApiClient](https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient).
+This demo covers how to send GPS locations of a driver as they travel. The rate of updates can be changed by requests from the client, and has the potential to fan-out to as many subscribers as needed. This demo is written in Java for Android devices, and uses the [Ably Realtime Java SDK](https://github.com/ably/ably-java/), and the [GoogleApiClient](https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient).
 
 ## MainActivity.java
-
 
 The main actions taken by the app are:
 
